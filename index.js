@@ -17,7 +17,8 @@ var store = new MongoDBStore({
   collection: 'sessions'
 });
 
-app.use(express.static('CSS')); //including CSS
+//app.use(express.static('CSS')); //including CSS
+app.use(express.static(__dirname + '/CSS'));
 
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
@@ -162,7 +163,7 @@ app.post('/task/create', function(req, res){
   newTask.collaborators = [req.body.collaborator1, req.body.collaborator2, req.body.collaborator3];
   newTask.save(function(err, savedTask){
     if(err || !savedTask){
-      res.send('Error saving task!');
+      res.send('Error saving task! Add a description');
     }else{
       res.redirect('/');
     }

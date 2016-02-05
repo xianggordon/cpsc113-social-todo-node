@@ -1,4 +1,5 @@
-<h1>Social todo app for cpsc113</h1>
+<h1>Social todo app - cpsc 113</h1>
+<h3>By Gordon<h3>
 
 {{#if errors}}
 <div style="color:red" class="validation-error">
@@ -16,7 +17,7 @@
             {{#each tasks}}
                 {{#if this.isComplete}}
                     <li class="tasks-list-item complete-task">
-                      <span class="task-title">{{this.title}} <b>COMPLETE</b></span>
+                      <span class="task-title" id="complete">{{this.title}} <b>✓ TASK COMPLETE! ✓</b></span>
                         {{#if this.isCreator}}
                             <form method="post" action="/task/delete/{{this._id}}">
                                 <input type="submit" name="delete-task" class="delete-task" value="Delete">
@@ -57,30 +58,32 @@
             <input name="collaborator1" type="email"><br>
             <input name="collaborator2" type="email"><br>
             <input name="collaborator3" type="email"><br>
-            <input type="submit" class="create-task-submit">
+            <input type="submit" class="create-task-submit" id="taskbutton">
         </form>
     </div>
 
 {{else}}
 <div>
-    <form class="login" action="/user/login" method="POST">
+    <form class="login logincss" action="/user/login" method="POST">
         <label for="email">Email</label>
         <input name="email" id="email" type="text"><br>
         <label for="password">Password</label>
         <input name="password"  id="password" type="text"><br>
-        <input type="submit"  class="log-in-submit">
+        <input type="submit"  id="buttoncss" class="log-in-submit">
     </form>
 </div>
 
 <div><hr></div>
 
 <div>
-    <form class="register" action="/user/register" method="POST" class="signup-form" style="display: block;">
+    <form class="register logincss" action="/user/register" method="POST" class="signup-form" style="display: block;">
       <input name="fl_name" type="text" class="text-input" placeholder="first &amp; last name">
       <input name="email" type="email" class="text-input" placeholder="email">
       <input name="password" type="password" class="text-input" placeholder="password">
       <input name="password_confirmation" type="password" class="text-input" placeholder="password confirmation">
-      <button class="sign-up-submit" type="submit">Register for a new account</button>
+      <button class="sign-up-submit button" id="buttoncss" type="submit">Register for a new account</button>
     </form>
 </div>
 {{/if}}
+
+<script type='text/javascript' src=''> </script>
