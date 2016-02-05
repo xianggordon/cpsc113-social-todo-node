@@ -14,15 +14,31 @@
         {{#if tasks}}
             <ul>
             {{#each tasks}}
-                <li class="tasks-list-item">
-                  <span class="task-title">{{this.title}}</span>
-                  <form method="post">
-                    <input type="button" name="delete-task" class="delete-task" value="Delete">
-                  </form>
-                  <form method="post">
-                    <input type="button" name="toggle-task" class="toggle-task" value="Mark complete">
-                  </form>
-                </li>
+                {{#if this.isComplete}}
+                    <li class="tasks-list-item complete-task">
+                      <span class="task-title">{{this.title}} <b>COMPLETE</b></span>
+                        {{#if this.isCreator}}
+                            <form method="post" action="/task/delete/{{this._id}}">
+                                <input type="submit" name="delete-task" class="delete-task" value="Delete">
+                            </form>
+                        {{/if}}
+                      <form method="post" action="/task/complete/{{this._id}}">
+                        <input type="submit" name="toggle-task" class="toggle-task" value="Mark complete"> 
+                      </form>
+                    </li>
+                {{else}}
+                    <li class="tasks-list-item">
+                      <span class="task-title">{{this.title}}</span>
+                        {{#if this.isCreator}}
+                          <form method="post" action="/task/delete/{{this._id}}">
+                            <input type="submit" name="delete-task" class="delete-task" value="Delete">
+                          </form>
+                        {{/if}}
+                      <form method="post" action="/task/complete/{{this._id}}">
+                        <input type="submit" name="toggle-task" class="toggle-task" value="Mark complete"> 
+                      </form>
+                    </li>
+                {{/if}}
             {{/each}}
             </ul>
         {{else}}
@@ -64,7 +80,7 @@
       <input name="email" type="email" class="text-input" placeholder="email">
       <input name="password" type="password" class="text-input" placeholder="password">
       <input name="password_confirmation" type="password" class="text-input" placeholder="password confirmation">
-      <input class="sign-up-submit" type="submit">
+      <button class="sign-up-submit" type="submit">Register for a new account</button>
     </form>
 </div>
 {{/if}}

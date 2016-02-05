@@ -56,6 +56,7 @@ function isLoggedIn(req, res, next){
 
 // Middleware that loads a users tasks if they are logged in.
 function loadUserTasks(req, res, next) {
+  var isCreator = null; //records whether the user created task
   if(!res.locals.currentUser){
     return next();
   }
@@ -64,6 +65,14 @@ function loadUserTasks(req, res, next) {
       {collaborators: res.locals.currentUser.email}])
     .exec(function(err, tasks){
       if(!err){
+        //marks whether the task is create
+        for (var i=0;i<tasks.length;i++){
+          if (res.locals.currentUser._id.toString()==tasks[i].owner.toString()){
+            tasks[i].isCreator = true;
+          }else{
+            tasks[i].isCreator = false;
+          }
+        }
         res.locals.tasks = tasks;
       }
       next();
@@ -156,6 +165,46 @@ app.post('/task/create', function(req, res){
     }
   });
 });
+
+// Complete task
+app.post('/task/complete/:id', function(req,res){
+  Tasks.findById(req.params.id, function(err, task){
+    if(task.isComplete){
+      Tasks.update({_id:req.params.id}, {isComplete: false},
+        function(err){
+          if(err){
+          res.send('Error marking task incompletion');
+          }else{
+          res.redirect('/');
+          }
+        });
+    }
+    else{
+      Tasks.update({_id:req.params.id}, {isComplete: true},
+      function(err){
+        if(err){
+          res.send('Error marking task complete');
+        }
+        else{
+          res.redirect('/');
+        }
+      });
+    }
+  });
+});
+
+// Delete Task
+app.post('/task/delete/:id', function(req,res){
+  Tasks.remove({_id:req.params.id}, //removing task where the current user id is the id on the task
+    function(err){
+      if(err){
+        res.send('Error with task deletion');
+      }else{
+        res.redirect('/');
+      }
+  });
+});
+
 
 // Start the server
 app.listen(process.env.PORT, function () {
